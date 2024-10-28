@@ -1,22 +1,45 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import './Calendar.css'
 import { useParams } from "react-router-dom";
-import { AppContext } from "../App";
 import {ReactComponent as Arrow} from './left_arrow.svg'
 import { useNavigate } from 'react-router-dom';  
 
 const month_str_list = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
 
 const Calendar = () => {
-    const { server_data } = useContext(AppContext);
     const user_id = useParams().user_id;
+    const [serverData, setServerData] = useState(undefined);
 
     const navigate = useNavigate();  
 
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth()); // Current month
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Current year
+
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://13.209.82.235:8000/api/diary/get_diary/sehoon1106`, {
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data)
+                    setServerData(data);
+                } else {
+                    console.error("Failed to fetch data:", response.status);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
     
-    if (server_data[user_id] === undefined){
+        fetchData();
+    }, [])
+    
+    if (serverData === undefined){
         return <div>404 Not Found</div>
     }
 
@@ -35,7 +58,7 @@ const Calendar = () => {
     // Handle tile click
     const handleTileClick = (day) => {
         const date = currentYear+'-'+(currentMonth+1)+'-'+day
-        if (server_data[user_id] === undefined || server_data[user_id]["diary"][date] === undefined){
+        if (serverData === undefined || serverData["diary"][date] === undefined){
             return;
         }
         navigate(`/${user_id}/${date}`)
@@ -64,9 +87,9 @@ const Calendar = () => {
 
     const generate_tile = (day, index) => {
         const date = currentYear+'-'+(currentMonth+1)+'-'+day
-        const have_diary = server_data[user_id]["diary"][date] ? true : false
-        let diarys = server_data[user_id]["diary"][date] ? server_data[user_id]["diary"][date] : []
-        console.log(server_data[user_id]["diary"][date])
+        const have_diary = serverData["diary"][date] ? true : false
+        let diarys = serverData["diary"][date] ? serverData["diary"][date] : []
+        console.log(serverData["diary"][date])
 
         return(
         <div key={index} className={`tile ${have_diary ? 'active' : ''}`} onClick={() => handleTileClick(day)}>
@@ -96,8 +119,8 @@ const Calendar = () => {
             <div className="calendar">
                 <div className="header">
                     <div className="month">{month_str_list[currentMonth]}</div>
-                    <div className="name"> Welcome {server_data[user_id]["user_name"]}</div>
-                    <div className="totalstudytime">You studied <strong>45 hours</strong> this month</div>
+                    <div className="name"> Welcome {serverData["user_name"]}</div>
+                    <div className="totalstudytime">Small <strong>pebbles</strong> make a river</div>
                 </div>
                 <div className="days">
                     <div>Sun</div>

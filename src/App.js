@@ -4,15 +4,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Calendar from './Pages/Calendar';
 import Diary from './Pages/Diary';
 
-export const AppContext = createContext();
+// export const AppContext = createContext();
 
-// read local json file "./fake_data.json"
-const server_data = require('./fake_data.json');
-// console.log(fake_data["sehoon1106"])
+// // read local json file "./fake_data.json"
+// const server_data = require('./fake_data.json');
+// // console.log(fake_data["sehoon1106"])
 
 function App() {
   return (
-    <AppContext.Provider value={{server_data}}>
       <div className="App">
         <BrowserRouter>
           <header className="App-header"/>
@@ -22,7 +21,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-    </AppContext.Provider>
   );
 }
 
