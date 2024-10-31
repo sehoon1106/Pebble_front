@@ -120,7 +120,7 @@ const Calendar = () => {
                 <div className="header">
                     <div className="month">{month_str_list[currentMonth]}</div>
                     <div className="name"> Welcome {serverData["user_name"]}</div>
-                    <div className="totalstudytime">Small <strong>pebbles</strong> make a river</div>
+                    <div className="totalstudytime">Small <strong>pebbles</strong> make a mountain</div>
                 </div>
                 <div className="days">
                     <div>Sun</div>
