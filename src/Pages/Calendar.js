@@ -52,6 +52,7 @@ const Calendar = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
+        if(day<10){ day = '0'+day }
         tiles.push(day);
     }
 
